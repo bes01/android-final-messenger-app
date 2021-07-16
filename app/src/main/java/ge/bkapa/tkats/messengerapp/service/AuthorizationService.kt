@@ -5,11 +5,16 @@ import android.util.Log
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import ge.bkapa.tkats.messengerapp.storage.AuthInteractor
+import ge.bkapa.tkats.messengerapp.storage.Interactor
+import ge.bkapa.tkats.messengerapp.storage.model.User
 
 class AuthorizationService(private val parentActivity: Activity) {
 
     private var auth: FirebaseAuth = Firebase.auth
+    private var interactor: AuthInteractor = Interactor()
 
     fun doLogin(nickname: String, password: String, openHomePage: (uid: String) -> Unit) {
         auth.signInWithEmailAndPassword(processNickname(nickname), processPassword(password))
@@ -40,8 +45,8 @@ class AuthorizationService(private val parentActivity: Activity) {
             .addOnCompleteListener(parentActivity) { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
-                    //TODO: add to db
-                    openHomePage(user!!.uid)
+                    interactor.addUser(user!!.uid, nickname, whatIDo);
+                    openHomePage(user.uid)
                 } else {
                     Log.e("Registration Error", task.exception.toString())
                     Toast.makeText(
