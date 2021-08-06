@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="messageSender">
+        <item name="android:textColor">#565c6f</item>
+        <item name="android:textSize">18sp</item>
+
+    </style>
+    
+</resources>
