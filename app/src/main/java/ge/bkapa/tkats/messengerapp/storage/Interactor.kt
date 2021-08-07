@@ -1,9 +1,12 @@
 package ge.bkapa.tkats.messengerapp.storage
 
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.util.Log
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import ge.bkapa.tkats.messengerapp.storage.model.Message
 import ge.bkapa.tkats.messengerapp.storage.model.User
 import java.util.function.Consumer
@@ -11,6 +14,7 @@ import java.util.function.Consumer
 class Interactor() : AuthInteractor, MessageListInteractor, ProfileInteractor {
 
     private val database = Firebase.database
+    private val storageReference = Firebase.storage.reference
 
     /** interface implementations  **/
 
@@ -29,7 +33,7 @@ class Interactor() : AuthInteractor, MessageListInteractor, ProfileInteractor {
     override fun getUserByIdRequest(
         id: String,
         resultKey: String,
-        resultReceiver: (String, Any) -> Unit
+        resultReceiver: (String, Any?) -> Unit
     ) {
         database.getReference("users").child(id).get().addOnSuccessListener {
             val iterator = it.children.iterator();
@@ -44,13 +48,38 @@ class Interactor() : AuthInteractor, MessageListInteractor, ProfileInteractor {
         id: String,
         user: User,
         resultKey: String,
-        resultReceiver: (key: String, result: Any) -> Unit
+        resultReceiver: (key: String, result: Any?) -> Unit
     ) {
         var userRef = database.getReference("users").child(id)
         userRef.setValue(user).addOnSuccessListener {
-            resultReceiver(resultKey, resultReceiver(resultKey, true))
+            resultReceiver(resultKey, resultReceiver(resultKey, null))
+        }
+    }
+
+    override fun uploadImage(
+        pathName: String,
+        imgUri: Uri,
+        resultKey: String,
+        resultReceiver: (key: String, result: Any?) -> Unit
+    ) {
+        val ref = storageReference.child("images/$pathName")
+
+        ref.putFile(imgUri).addOnSuccessListener {
+            resultReceiver(resultKey, null)
+        }
+    }
+
+    override fun downloadImage(
+        pathName: String,
+        resultKey: String,
+        resultReceiver: (key: String, result: Any?) -> Unit
+    ) {
+        val ref = storageReference.child("images/$pathName")
+        ref.getBytes(1024 * 1024 * 10).addOnSuccessListener {
+            val bitmap = BitmapFactory.decodeByteArray(it, 0, it.size)
+            resultReceiver(resultKey, bitmap)
         }.addOnFailureListener {
-            resultReceiver(resultKey, resultReceiver(resultKey, false))
+            resultReceiver(resultKey, null)
         }
     }
 
@@ -85,7 +114,13 @@ class Interactor() : AuthInteractor, MessageListInteractor, ProfileInteractor {
                         Log.e("user.not.found", "User Not Found")
                     } else {
                         val res = task.result?.value as HashMap<*, *>
-                        function(User(res["username"] as String, res["nickname"] as String ,res["whatIdo"] as String))
+                        function(
+                            User(
+                                res["username"] as String,
+                                res["nickname"] as String,
+                                res["whatIdo"] as String
+                            )
+                        )
                     }
                 }
             })
