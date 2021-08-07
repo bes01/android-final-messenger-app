@@ -21,7 +21,7 @@ class ProfilePresenter(private val parentFragment: ProfileFragment) {
         if (resultKey == ACTIVE_USER) {
             parentFragment.initUser(result as User)
         } else if(resultKey == USER_UPDATED){
-            parentFragment.userUpdateMessage("Updated Successfully!")
+            parentFragment.userUpdateMessage()
         }
     }
 

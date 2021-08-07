@@ -68,8 +68,8 @@ class ProfileFragment(private val activity: Activity, val userId: String) : Frag
         }
     }
 
-    fun userUpdateMessage(message: String) {
-//        Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+    fun userUpdateMessage() {
+        Toast.makeText(activity, "Updated Successfully!", Toast.LENGTH_LONG).show()
     }
 
 }
