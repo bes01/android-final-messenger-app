@@ -40,7 +40,7 @@ class MessageListFragment(var activity: MessageListActivity) : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val inflate = inflater.inflate(R.layout.fragment_message_list, container, false)
-        val list : RecyclerView = inflate.findViewById<RecyclerView>(R.id.message_list)
+        val list : RecyclerView = inflate.findViewById(R.id.message_list)
         list.adapter = listAdapter
         list.layoutManager =LinearLayoutManager(this.context,LinearLayoutManager.VERTICAL, false)
 

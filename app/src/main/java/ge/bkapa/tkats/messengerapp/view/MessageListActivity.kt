@@ -7,15 +7,16 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.CollapsingToolbarLayout
 import ge.bkapa.tkats.messengerapp.R
 import ge.bkapa.tkats.messengerapp.adapter.MessagePageFragmentAdapter
 
-class MessageListActivity : AppCompatActivity(),FragmentedActivity {
+class MessageListActivity : AppCompatActivity(), FragmentedActivity {
 
-    private lateinit var fragmentAdapter:MessagePageFragmentAdapter
+    private lateinit var fragmentAdapter: MessagePageFragmentAdapter
 
     private lateinit var viewpager: ViewPager2
+
+    private lateinit var userId: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,17 +26,18 @@ class MessageListActivity : AppCompatActivity(),FragmentedActivity {
     }
 
     private fun initView() {
-        fragmentAdapter = MessagePageFragmentAdapter(this)
+        userId = intent.getStringExtra(AuthorizationActivity.USER_ID) as String
+        fragmentAdapter = MessagePageFragmentAdapter(this, userId)
         viewpager = findViewById(R.id.messenger_main_fragment_container)
         viewpager.adapter = fragmentAdapter
 
         viewpager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                if (position == 1){
+                if (position == 1) {
                     findViewById<AppBarLayout>(R.id.appBarLayout).visibility = View.GONE
                 }
-                if (position==0){
+                if (position == 0) {
                     findViewById<AppBarLayout>(R.id.appBarLayout).visibility = View.VISIBLE
                 }
             }
@@ -47,10 +49,9 @@ class MessageListActivity : AppCompatActivity(),FragmentedActivity {
         findViewById<AppCompatImageView>(R.id.home).setOnClickListener(View.OnClickListener {
             viewpager.currentItem = 0
         })
-
-
     }
 
+    //TODO: onResume  - check user sign in status
 
     override fun getFragment(index: Int): Fragment {
         return fragmentAdapter.pageLists[index]

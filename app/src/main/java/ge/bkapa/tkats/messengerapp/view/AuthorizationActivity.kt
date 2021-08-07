@@ -26,7 +26,7 @@ class AuthorizationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_authorization)
         if (authorizationService.isAuthorized()) {
-            Log.i("my_mes","Authorized")
+            Log.i("my_mes", "Authorized")
             openHomePage(authorizationService.getCurrentUserId())
         }
         initComponents()
@@ -88,15 +88,17 @@ class AuthorizationActivity : AppCompatActivity() {
         }
     }
 
-    // TODO: გადასვლის მერე ექთივითების სტეკიდან ამოსაგდებია ეს ექთივითი
     private fun openHomePage(uid: String) {
-        Log.i("my_mes","Open home page")
         finish()
 
         val intent = Intent(this, MessageListActivity::class.java)
-        intent.putExtra("uid",uid)
+        intent.putExtra(USER_ID, uid)
 
         startActivity(intent)
+    }
+
+    companion object {
+        const val USER_ID = "USER_ID"
     }
 
 }
