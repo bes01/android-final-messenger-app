@@ -9,7 +9,10 @@
         android:roundIcon="@mipmap/chat_image_foreground"
         android:supportsRtl="true"
         android:theme="@style/Theme.MessengerApp">
-        <activity android:name=".view.MessageListActivity"></activity>
+        <activity
+            android:name=".view.SearchActivity"
+            android:exported="true" />
+        <activity android:name=".view.MessageListActivity" />
         <activity android:name=".view.AuthorizationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

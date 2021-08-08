@@ -8,10 +8,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ge.bkapa.tkats.messengerapp.R
 import ge.bkapa.tkats.messengerapp.storage.model.ListMessageRepresentation
-import ge.bkapa.tkats.messengerapp.storage.model.Message
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.util.*
 
 class MessageListAdapter (var list: MutableList<ListMessageRepresentation>): RecyclerView.Adapter<MessageViewHolder>(){
 

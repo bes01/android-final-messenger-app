@@ -26,7 +26,6 @@ class AuthorizationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_authorization)
         if (authorizationService.isAuthorized()) {
-            Log.i("my_mes", "Authorized")
             openHomePage(authorizationService.getCurrentUserId())
         }
         initComponents()

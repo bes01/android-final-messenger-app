@@ -3,15 +3,16 @@ package ge.bkapa.tkats.messengerapp.storage
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
-import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import ge.bkapa.tkats.messengerapp.storage.model.Message
 import ge.bkapa.tkats.messengerapp.storage.model.User
+import ge.bkapa.tkats.messengerapp.storage.model.UserWithId
 import java.util.function.Consumer
 
-class Interactor() : AuthInteractor, MessageListInteractor, ProfileInteractor {
+class Interactor() : AuthInteractor, MessageListInteractor, ProfileInteractor, SearchInteractor {
 
     private val database = Firebase.database
     private val storageReference = Firebase.storage.reference
@@ -27,9 +28,6 @@ class Interactor() : AuthInteractor, MessageListInteractor, ProfileInteractor {
         getFullUser(uid) { user -> getUserMessages(user, function) }
     }
 
-    /**
-     * Profile Page
-     */
     override fun getUserByIdRequest(
         id: String,
         resultKey: String,
@@ -75,11 +73,40 @@ class Interactor() : AuthInteractor, MessageListInteractor, ProfileInteractor {
         resultReceiver: (key: String, result: Any?) -> Unit
     ) {
         val ref = storageReference.child("images/$pathName")
-        ref.getBytes(1024 * 1024 * 10).addOnSuccessListener {
+        ref.getBytes(MAX_IMG_SIZE).addOnSuccessListener {
             val bitmap = BitmapFactory.decodeByteArray(it, 0, it.size)
             resultReceiver(resultKey, bitmap)
         }.addOnFailureListener {
             resultReceiver(resultKey, null)
+        }
+    }
+
+    override fun getNextChunkOfUsers(
+        lastUserId: String?,
+        resultKey: String,
+        resultReceiver: (key: String, result: Any?) -> Unit
+    ) {
+        val usersRef = database.getReference("users")
+        if (lastUserId != null) {
+            usersRef.orderByKey().startAfter(lastUserId).limitToFirst(USER_CHUNK_SIZE).get()
+                .addOnSuccessListener {
+                    resultReceiver(resultKey, getChunkOfUsers(it))
+                }
+        } else {
+            usersRef.orderByKey().limitToFirst(USER_CHUNK_SIZE).get().addOnSuccessListener {
+                resultReceiver(resultKey, getChunkOfUsers(it))
+            }
+        }
+    }
+
+    override fun getUserByNickname(
+        nickname: String,
+        resultKey: String,
+        resultReceiver: (key: String, result: Any?) -> Unit
+    ) {
+        val usersRef = database.getReference("users")
+        usersRef.orderByChild("nickname").equalTo(nickname).get().addOnSuccessListener {
+            resultReceiver(resultKey, getChunkOfUsers(it))
         }
     }
 
@@ -107,23 +134,41 @@ class Interactor() : AuthInteractor, MessageListInteractor, ProfileInteractor {
     }
 
     private fun getFullUser(uid: String, function: (User) -> Unit) {
-        database.getReference("users").child(uid).get().addOnCompleteListener(
-            OnCompleteListener { task ->
-                run {
-                    if (task.isCanceled) {
-                        Log.e("user.not.found", "User Not Found")
-                    } else {
-                        val res = task.result?.value as HashMap<*, *>
-                        function(
-                            User(
-                                res["username"] as String,
-                                res["nickname"] as String,
-                                res["whatIdo"] as String
-                            )
+        database.getReference("users").child(uid).get().addOnCompleteListener { task ->
+            run {
+                if (task.isCanceled) {
+                    Log.e("user.not.found", "User Not Found")
+                } else {
+                    val res = task.result?.value as HashMap<*, *>
+                    function(
+                        User(
+                            res["username"] as String,
+                            res["nickname"] as String,
+                            res["whatIdo"] as String
                         )
-                    }
+                    )
                 }
-            })
+            }
+        }
+    }
+
+    private fun getChunkOfUsers(it: DataSnapshot?): MutableList<UserWithId> {
+        val users = mutableListOf<UserWithId>()
+        it?.children?.forEach { u ->
+            val userInfo = u.value as HashMap<String, String>
+            users.add(
+                UserWithId(
+                    u.key as String,
+                    User(userInfo["username"], userInfo["nickname"], userInfo["whatIdo"])
+                )
+            )
+        }
+        return users
+    }
+
+    companion object {
+        const val USER_CHUNK_SIZE = 6
+        const val MAX_IMG_SIZE: Long = 1024 * 1024 * 10
     }
 
 }
