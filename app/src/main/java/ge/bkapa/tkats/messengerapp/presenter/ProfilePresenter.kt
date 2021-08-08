@@ -3,6 +3,7 @@ package ge.bkapa.tkats.messengerapp.presenter
 import android.graphics.Bitmap
 import android.net.Uri
 import android.view.View
+import android.widget.ProgressBar
 import ge.bkapa.tkats.messengerapp.R
 import ge.bkapa.tkats.messengerapp.storage.Interactor
 import ge.bkapa.tkats.messengerapp.storage.ProfileInteractor
@@ -46,6 +47,7 @@ class ProfilePresenter(private val parentFragment: ProfileFragment) {
                 } else {
                     parentFragment.changeImageIV.setImageResource(R.drawable.avatar_image_placeholder)
                 }
+                parentFragment.activity?.findViewById<ProgressBar>(R.id.image_loading)?.visibility = View.GONE
             }
         }
     }

@@ -51,14 +51,13 @@ class ProfileFragment(private val activity: Activity, val userId: String) : Frag
         changeNameET = activity.findViewById(R.id.change_nickname)
         changeWhatIDoET = activity.findViewById(R.id.change_what_u_do)
         changeImageIV = activity.findViewById(R.id.change_photo)
-        presenter.makeImageDownloadRequest(userId)
         initView()
     }
 
     fun initUser(user: User) {
         changeNameET.setText(user.nickname)
         changeWhatIDoET.setText(user.whatIdo)
-
+        presenter.makeImageDownloadRequest(user.username!!)
         this.user = user
     }
 
@@ -93,7 +92,7 @@ class ProfileFragment(private val activity: Activity, val userId: String) : Frag
         if (requestCode == IMAGE_RESULT_CODE && resultCode == Activity.RESULT_OK && data != null) {
             val imageUri: Uri = data.data as Uri
             changeImageIV.setImageURI(imageUri)
-            presenter.makeImageUploadRequest(userId, imageUri)
+            presenter.makeImageUploadRequest(user.username!!, imageUri)
         }
     }
 
