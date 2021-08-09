@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/chat_image_foreground"
         android:supportsRtl="true"
         android:theme="@style/Theme.MessengerApp">
+        <activity android:name=".view.ChatActivity"></activity>
         <activity
             android:name=".view.SearchActivity"
             android:exported="true" />
