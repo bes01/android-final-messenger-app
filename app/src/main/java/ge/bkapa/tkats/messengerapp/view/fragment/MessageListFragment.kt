@@ -13,7 +13,6 @@ import ge.bkapa.tkats.messengerapp.adapter.MessageListAdapter
 import ge.bkapa.tkats.messengerapp.presenter.MessageListPresenter
 import ge.bkapa.tkats.messengerapp.storage.model.ListMessageRepresentation
 import ge.bkapa.tkats.messengerapp.storage.model.User
-import ge.bkapa.tkats.messengerapp.view.ChatActivityStarter
 import ge.bkapa.tkats.messengerapp.view.MessageListActivity
 
 
@@ -23,20 +22,23 @@ class MessageListFragment(var activity: MessageListActivity) : Fragment() {
 
     private lateinit var listAdapter : MessageListAdapter
 
-    private lateinit var messageListPresenter: MessageListPresenter
+    private var messageListPresenter: MessageListPresenter  ? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        messageList = mutableListOf()
+        listAdapter = MessageListAdapter(messageList,activity)
+        messageListPresenter = MessageListPresenter(this, activity)
+
         getData()
     }
 
     fun getData() {
-        messageList = mutableListOf()
-        listAdapter = MessageListAdapter(messageList, activity as ChatActivityStarter)
-        messageListPresenter = MessageListPresenter(this, activity)
+        if (messageListPresenter!=null){
+            messageListPresenter?.getAllMessagesForUser()
+        }
 
-        messageListPresenter.getAllMessagesForUser()
     }
 
     override fun onCreateView(
@@ -57,8 +59,8 @@ class MessageListFragment(var activity: MessageListActivity) : Fragment() {
         listAdapter.notifyDataSetChanged()
     }
 
-    fun getActiveUser(function: (u :User) -> Unit) {
-        messageListPresenter.getActiveUser(function)
+    fun getActiveUser(function: (u: User) -> Unit) {
+        messageListPresenter?.getActiveUser(function)
     }
 
 

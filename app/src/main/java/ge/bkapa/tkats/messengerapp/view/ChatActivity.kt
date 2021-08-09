@@ -1,12 +1,12 @@
 package ge.bkapa.tkats.messengerapp.view
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ge.bkapa.tkats.messengerapp.R
@@ -47,7 +47,7 @@ class ChatActivity : AppCompatActivity() {
         }
 
         findViewById<TextView>(R.id.sender_username).text = intent.getStringExtra(
-            MessageListActivity.USERNAME2
+            MessageListActivity.NAME
         )!!
 
 
@@ -59,6 +59,10 @@ class ChatActivity : AppCompatActivity() {
             intent.getStringExtra(MessageListActivity.USERNAME1)!!,
             intent.getStringExtra(MessageListActivity.USERNAME2)!!
         )
+
+        findViewById<ImageView>(R.id.chat_back_icon).setOnClickListener(View.OnClickListener {
+            finish()
+        })
 
         findViewById<ImageView>(R.id.send_message).setOnClickListener(View.OnClickListener {
             chatPresenter.sendMessage(
