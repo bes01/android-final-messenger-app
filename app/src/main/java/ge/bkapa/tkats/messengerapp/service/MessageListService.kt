@@ -12,7 +12,7 @@ import ge.bkapa.tkats.messengerapp.view.MessageListActivity
 class MessageListService (val parentActivity:MessageListActivity){
 
     private var auth: FirebaseAuth = Firebase.auth
-    private var interactor: MessageListInteractor = Interactor()
+    private var interactor: MessageListInteractor = Interactor.instance
 
     fun getMessagesForUser(function: (MutableList<ListMessageRepresentation>) -> Unit) {
         interactor.getMessagesForUser(auth.currentUser!!.uid) { list: MutableList<Message> ->

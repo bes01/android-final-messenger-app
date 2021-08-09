@@ -12,7 +12,7 @@ import ge.bkapa.tkats.messengerapp.view.fragment.ProfileFragment
 
 class ProfilePresenter(private val parentFragment: ProfileFragment) {
 
-    var interactor: ProfileInteractor = Interactor()
+    var interactor: ProfileInteractor = Interactor.instance
 
     fun makeGetUserByIdRequest(id: String) {
         interactor.getUserByIdRequest(id, ACTIVE_USER, this::receiveResult)

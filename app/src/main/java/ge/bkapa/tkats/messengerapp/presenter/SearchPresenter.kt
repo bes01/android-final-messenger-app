@@ -10,7 +10,7 @@ import ge.bkapa.tkats.messengerapp.view.SearchActivity
 
 class SearchPresenter(private val activity: SearchActivity) {
 
-    private var interactor: SearchInteractor = Interactor()
+    private var interactor: SearchInteractor = Interactor.instance
 
     private var authService = AuthorizationService(activity)
 

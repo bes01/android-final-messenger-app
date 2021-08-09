@@ -1,5 +1,6 @@
 package ge.bkapa.tkats.messengerapp.storage
 
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
@@ -10,16 +11,16 @@ import com.google.firebase.storage.ktx.storage
 import ge.bkapa.tkats.messengerapp.storage.model.Message
 import ge.bkapa.tkats.messengerapp.storage.model.User
 import ge.bkapa.tkats.messengerapp.storage.model.UserWithId
-import java.util.concurrent.Executor
 import java.util.function.Consumer
 import kotlin.reflect.KFunction1
 import kotlin.reflect.KFunction2
 
 class Interactor : AuthInteractor,
-                     MessageListInteractor,
-                     ProfileInteractor,
-                     SearchInteractor,
-                     ChatInteractor {
+    MessageListInteractor,
+    ProfileInteractor,
+    SearchInteractor,
+    ChatInteractor,
+    SearchAdapterInteractor {
 
     private val database = Firebase.database
     private val storageReference = Firebase.storage.reference
@@ -31,8 +32,8 @@ class Interactor : AuthInteractor,
         usersRef.child(uid).setValue(User(username, username, whatIdo))
     }
 
-    override fun getUser(uid : String, function: (u: User) -> Unit) {
-        getFullUser(uid,function)
+    override fun getUser(uid: String, function: (u: User) -> Unit) {
+        getFullUser(uid, function)
     }
 
     override fun getMessagesForUser(uid: String, function: (MutableList<Message>) -> Unit) {
@@ -92,6 +93,16 @@ class Interactor : AuthInteractor,
         }
     }
 
+    override fun downloadImage(pathName: String?, resultReceiver: (result: Bitmap?) -> Unit) {
+        val ref = storageReference.child("images/$pathName")
+        ref.getBytes(MAX_IMG_SIZE).addOnSuccessListener {
+            val bitmap = BitmapFactory.decodeByteArray(it, 0, it.size)
+            resultReceiver(bitmap)
+        }.addOnFailureListener {
+            resultReceiver(null)
+        }
+    }
+
     override fun getNextChunkOfUsers(
         lastUserId: String?,
         resultKey: String,
@@ -128,7 +139,8 @@ class Interactor : AuthInteractor,
     ) {
         val result = mutableListOf<Message>()
         username1.let {
-            database.getReference("messages").child(it).child(username2).get().addOnSuccessListener { res ->
+            database.getReference("messages").child(it).child(username2).get()
+                .addOnSuccessListener { res ->
                     result.addAll(res.children.map { dataSnapshot ->
                         val value = dataSnapshot.value as HashMap<*, *>
                         Message(
@@ -139,8 +151,8 @@ class Interactor : AuthInteractor,
                             username2
                         )
                     });
-                function(result)
-            }
+                    function(result)
+                }
         }
     }
 
@@ -156,10 +168,10 @@ class Interactor : AuthInteractor,
 
     override fun setSenderWhatIDo(username: String, kFunction1: KFunction1<String, Unit>) {
         val ref = database.getReference("users")
-            ref.orderByChild("username").equalTo(username).get().addOnSuccessListener {
-                val value = (it.value as HashMap<*,*>).toList()[0].second as HashMap<*,*>
-                kFunction1(value["whatIdo"] as String)
-            }
+        ref.orderByChild("username").equalTo(username).get().addOnSuccessListener {
+            val value = (it.value as HashMap<*, *>).toList()[0].second as HashMap<*, *>
+            kFunction1(value["whatIdo"] as String)
+        }
     }
 
     override fun sendMessage(
@@ -176,51 +188,71 @@ class Interactor : AuthInteractor,
         dbReference.child(activeUser).child(chatUser).get().addOnSuccessListener {
             val children = mutableListOf<Message>()
 
-            if (it.value != null){
-                it.children.forEach(Consumer { item->
+            if (it.value != null) {
+                it.children.forEach(Consumer { item ->
                     val value = item.value as HashMap<*, *>
-                    children.add(Message(
-                        value["sender"] as String,
-                        value["message"] as String,
-                        value["sendTime"] as Long,
-                        activeUser,
-                        chatUser
-                    ))
+                    children.add(
+                        Message(
+                            value["sender"] as String,
+                            value["message"] as String,
+                            value["sendTime"] as Long,
+                            activeUser,
+                            chatUser
+                        )
+                    )
                 })
             }
-            children.add(Message(activeUser,text,System.currentTimeMillis(),activeUser,chatUser))
-            val data = HashMap<String,Message>()
-            var i :Int = 0
-            children.forEach(Consumer { message->
-                if (message!=null){
+            children.add(
+                Message(
+                    activeUser,
+                    text,
+                    System.currentTimeMillis(),
+                    activeUser,
+                    chatUser
+                )
+            )
+            val data = HashMap<String, Message>()
+            var i: Int = 0
+            children.forEach(Consumer { message ->
+                if (message != null) {
                     data[i.toString()] = message
                     i++
                 }
             })
             activeUserRef.child(chatUser).updateChildren(data as Map<String, Any>)
-            kFunction0(activeUser,chatUser)
+            kFunction0(activeUser, chatUser)
         }
 
         dbReference.child(chatUser).child(activeUser).get().addOnSuccessListener {
             val children = mutableListOf<Message>()
 
-            if (it.value != null){
-                it.children.forEach(Consumer { item->
+            if (it.value != null) {
+                it.children.forEach(Consumer { item ->
                     val value = item.value as HashMap<*, *>
-                    children.add(Message(
-                        value["sender"] as String,
-                        value["message"] as String,
-                        value["sendTime"] as Long,
-                        chatUser,
-                        activeUser
-                    ))
+                    children.add(
+                        Message(
+                            value["sender"] as String,
+                            value["message"] as String,
+                            value["sendTime"] as Long,
+                            chatUser,
+                            activeUser
+                        )
+                    )
                 })
             }
-            children.add(Message(activeUser,text,System.currentTimeMillis(),chatUser,activeUser))
-            val data = HashMap<String,Message>()
-            var i :Int = 0
-            children.forEach(Consumer { message->
-                if (message!=null){
+            children.add(
+                Message(
+                    activeUser,
+                    text,
+                    System.currentTimeMillis(),
+                    chatUser,
+                    activeUser
+                )
+            )
+            val data = HashMap<String, Message>()
+            var i: Int = 0
+            children.forEach(Consumer { message ->
+                if (message != null) {
                     data[i.toString()] = message
                     i++
                 }
@@ -239,7 +271,7 @@ class Interactor : AuthInteractor,
         user.username?.let {
             database.getReference("messages").child(it).get().addOnSuccessListener { res ->
                 res.children.toList().forEach(Consumer { t ->
-                    val curData :List<Message> = t.children.map { dataSnapshot ->
+                    val curData: List<Message> = t.children.map { dataSnapshot ->
                         val value = dataSnapshot.value as HashMap<*, *>
 
                         Message(
@@ -254,23 +286,23 @@ class Interactor : AuthInteractor,
 
                     curData.sortedBy { curMes -> curMes.sendTime }
 
-                    if (curData.isNotEmpty()){
-                        result.add(curData[curData.size-1])
+                    if (curData.isNotEmpty()) {
+                        result.add(curData[curData.size - 1])
                     }
 
                     var i = 0
 
-                    result.map { item->
-                        getFullUserByUsername(item.participantTwo!!){ user ->
+                    result.map { item ->
+                        getFullUserByUsername(item.participantTwo!!) { user ->
 
                             item.nickNameToRender = user.nickname
 
                             val ref = storageReference.child("images/" + item.participantTwo)
-                            ref.getBytes(MAX_IMG_SIZE).addOnSuccessListener {curIt->
+                            ref.getBytes(MAX_IMG_SIZE).addOnSuccessListener { curIt ->
                                 i++
                                 val bitmap = BitmapFactory.decodeByteArray(curIt, 0, curIt.size)
                                 item.imageData = bitmap
-                                if (i==result.size){
+                                if (i == result.size) {
                                     function(result)
                                 }
                             }.addOnFailureListener {
@@ -322,6 +354,7 @@ class Interactor : AuthInteractor,
         }
 
     }
+
     private fun getChunkOfUsers(it: DataSnapshot?): MutableList<UserWithId> {
         val users = mutableListOf<UserWithId>()
         it?.children?.forEach { u ->
@@ -337,10 +370,16 @@ class Interactor : AuthInteractor,
     }
 
     companion object {
-        const val USER_CHUNK_SIZE = 6
+        const val USER_CHUNK_SIZE = 10
         const val MAX_IMG_SIZE: Long = 1024 * 1024 * 10
+
+        private var interactorInstance: Interactor? = null
+
+        val instance: Interactor
+            get() {
+                if (interactorInstance == null) interactorInstance = Interactor()
+                return interactorInstance!!
+            }
     }
-
-
 
 }

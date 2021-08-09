@@ -13,7 +13,7 @@ import kotlin.reflect.KFunction2
 class ChatService {
 
     private var auth: FirebaseAuth = Firebase.auth
-    private var interactor: ChatInteractor = Interactor()
+    private var interactor: ChatInteractor = Interactor.instance
 
     fun getChatForUser(username1: String,username2: String,function: (MutableList<ChatMessageRepresentation>) -> Unit) {
         interactor.getMessagesForBetweenUsers(username1,username2) { list: MutableList<Message> ->

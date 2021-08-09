@@ -13,7 +13,7 @@ import ge.bkapa.tkats.messengerapp.storage.model.User
 class AuthorizationService(private val parentActivity: Activity) {
 
     private var auth: FirebaseAuth = Firebase.auth
-    private var interactor: AuthInteractor = Interactor()
+    private var interactor: AuthInteractor = Interactor.instance
 
     fun doLogin(nickname: String, password: String, openHomePage: (uid: String) -> Unit) {
         auth.signInWithEmailAndPassword(processNickname(nickname), processPassword(password))
