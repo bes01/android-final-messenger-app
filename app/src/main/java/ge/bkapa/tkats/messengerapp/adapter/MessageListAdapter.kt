@@ -4,6 +4,7 @@ package ge.bkapa.tkats.messengerapp.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ge.bkapa.tkats.messengerapp.R
@@ -29,9 +30,15 @@ class MessageListAdapter (var list: MutableList<ListMessageRepresentation>, var 
 class MessageViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
 
     fun bind(message: ListMessageRepresentation, parentActivity: ChatActivityStarter){
-        userName.text = message.userName
+        userName.text = message.nickNameToRender
         messageText.text = message.message
         sendTime.text = message.formattedTime
+        if (message.imageData!=null){
+            userImage.setImageBitmap(message.imageData)
+        }else{
+            userImage.setImageResource(R.drawable.avatar_image_placeholder)
+        }
+
         userName.setOnClickListener(View.OnClickListener {
             parentActivity.startChatActivity(message)
         })
@@ -41,5 +48,6 @@ class MessageViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
     private var userName: TextView = itemView.findViewById(R.id.userName)
     private var messageText: TextView = itemView.findViewById(R.id.message)
     private var sendTime: TextView = itemView.findViewById(R.id.sendTime)
+    private var userImage:ImageView = itemView.findViewById(R.id.user_image_view)
 
 }

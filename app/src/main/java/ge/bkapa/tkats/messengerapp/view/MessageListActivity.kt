@@ -13,8 +13,13 @@ import ge.bkapa.tkats.messengerapp.R
 import ge.bkapa.tkats.messengerapp.adapter.MessagePageFragmentAdapter
 import ge.bkapa.tkats.messengerapp.storage.model.ListMessageRepresentation
 import ge.bkapa.tkats.messengerapp.view.fragment.MessageListFragment
+import java.io.Serializable
 
-class MessageListActivity : AppCompatActivity(), FragmentedActivity, ChatActivityStarter {
+class MessageListActivity : AppCompatActivity(),
+                            FragmentedActivity,
+                            ChatActivityStarter,
+                            Serializable,
+                            MessageListFetcher {
 
     private lateinit var fragmentAdapter: MessagePageFragmentAdapter
 
@@ -61,20 +66,24 @@ class MessageListActivity : AppCompatActivity(), FragmentedActivity, ChatActivit
     }
 
     override fun startChatActivity(uid: ListMessageRepresentation){
+        val messageListFragment = getFragment(0) as MessageListFragment
 
-        (getFragment(0) as MessageListFragment).getActiveUser { (u ) ->
-            run {
+       messageListFragment.getActiveUser {
                 val intent = Intent(this, ChatActivity::class.java)
-                intent.putExtra(USERNAME1, u)
+                intent.putExtra(USERNAME1, it.username)
                 intent.putExtra(USERNAME2, uid.userName)
-
+                intent.putExtra(NAME, uid.nickNameToRender)
                 startActivity(intent)
-            }
         }
     }
 
     override fun onResume() {
         super.onResume()
+        fetchMessageList()
+    }
+
+
+    override fun fetchMessageList() {
         (getFragment(0) as MessageListFragment).getData()
     }
 
@@ -88,6 +97,7 @@ class MessageListActivity : AppCompatActivity(), FragmentedActivity, ChatActivit
         const val USER_ID = "USER_ID"
         const val USERNAME1 = "USERNAME1"
         const val USERNAME2 = "USERNAME2"
+        const val NAME = "NAME"
     }
 
 }

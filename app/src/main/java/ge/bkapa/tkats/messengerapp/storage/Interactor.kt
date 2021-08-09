@@ -10,6 +10,7 @@ import com.google.firebase.storage.ktx.storage
 import ge.bkapa.tkats.messengerapp.storage.model.Message
 import ge.bkapa.tkats.messengerapp.storage.model.User
 import ge.bkapa.tkats.messengerapp.storage.model.UserWithId
+import java.util.concurrent.Executor
 import java.util.function.Consumer
 import kotlin.reflect.KFunction1
 import kotlin.reflect.KFunction2
@@ -237,9 +238,10 @@ class Interactor : AuthInteractor,
         val result = mutableListOf<Message>()
         user.username?.let {
             database.getReference("messages").child(it).get().addOnSuccessListener { res ->
-                res.children.forEach(Consumer { t ->
-                    result.addAll(t.children.map { dataSnapshot ->
+                res.children.toList().forEach(Consumer { t ->
+                    val curData :List<Message> = t.children.map { dataSnapshot ->
                         val value = dataSnapshot.value as HashMap<*, *>
+
                         Message(
                             value["sender"] as String,
                             value["message"] as String,
@@ -247,9 +249,40 @@ class Interactor : AuthInteractor,
                             user.username!!,
                             t.key
                         )
-                    });
+
+                    }
+
+                    curData.sortedBy { curMes -> curMes.sendTime }
+
+                    if (curData.isNotEmpty()){
+                        result.add(curData[curData.size-1])
+                    }
+
+                    var i = 0
+
+                    result.map { item->
+                        getFullUserByUsername(item.participantTwo!!){ user ->
+
+                            item.nickNameToRender = user.nickname
+
+                            val ref = storageReference.child("images/" + item.participantTwo)
+                            ref.getBytes(MAX_IMG_SIZE).addOnSuccessListener {curIt->
+                                i++
+                                val bitmap = BitmapFactory.decodeByteArray(curIt, 0, curIt.size)
+                                item.imageData = bitmap
+                                if (i==result.size){
+                                    function(result)
+                                }
+                            }.addOnFailureListener {
+                                i++
+                                item.imageData = null
+                                if (i == result.size) {
+                                    function(result)
+                                }
+                            }
+                        }
+                    }
                 })
-                function(result)
             }
         }
     }
@@ -273,6 +306,22 @@ class Interactor : AuthInteractor,
         }
     }
 
+    private fun getFullUserByUsername(userName: String, function: (User) -> Unit) {
+        val usersRef = database.getReference("users")
+        usersRef.orderByChild("username").equalTo(userName).get().addOnSuccessListener { task ->
+            run {
+                val res = task.children.toList()[0].value as HashMap<*, *>
+                function(
+                    User(
+                        res["username"] as String,
+                        res["nickname"] as String,
+                        res["whatIdo"] as String
+                    )
+                )
+            }
+        }
+
+    }
     private fun getChunkOfUsers(it: DataSnapshot?): MutableList<UserWithId> {
         val users = mutableListOf<UserWithId>()
         it?.children?.forEach { u ->

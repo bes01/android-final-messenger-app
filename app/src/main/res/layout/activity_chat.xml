@@ -38,6 +38,7 @@
                     android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/chat_back_icon"
                     android:src="@drawable/ic_baseline_arrow_back_ios_24"
                     android:layout_width="40dp"
                     android:layout_height="40dp"/>

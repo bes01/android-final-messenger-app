@@ -106,13 +106,14 @@ class SearchActivity : AppCompatActivity() {
         presenter.makeUserSearchRequest(searchWord)
     }
 
-    fun startChatActivity(username: String?) {
+    fun startChatActivity(item: User ) {
 
         presenter.getCurrentUser {
             finish()
             val intent = Intent(this, ChatActivity::class.java)
             intent.putExtra(MessageListActivity.USERNAME1, it.username)
-            intent.putExtra(MessageListActivity.USERNAME2, username)
+            intent.putExtra(MessageListActivity.USERNAME2, item.username)
+            intent.putExtra(MessageListActivity.NAME, item.nickname)
 
             startActivity(intent)
 

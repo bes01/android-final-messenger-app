@@ -39,7 +39,7 @@ class SearchListAdapter(private val users: List<User>, private val activity: Sea
             nickname.text = item.nickname
             whatIDo.text = item.whatIdo
             itemView.setOnClickListener {
-                activity.startChatActivity(item.username)
+                activity.startChatActivity(item)
             }
         }
 
