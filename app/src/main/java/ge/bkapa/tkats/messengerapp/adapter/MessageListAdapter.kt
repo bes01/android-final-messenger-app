@@ -8,15 +8,16 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ge.bkapa.tkats.messengerapp.R
 import ge.bkapa.tkats.messengerapp.storage.model.ListMessageRepresentation
+import ge.bkapa.tkats.messengerapp.view.ChatActivityStarter
 
-class MessageListAdapter (var list: MutableList<ListMessageRepresentation>): RecyclerView.Adapter<MessageViewHolder>(){
+class MessageListAdapter (var list: MutableList<ListMessageRepresentation>, var parentActivity: ChatActivityStarter): RecyclerView.Adapter<MessageViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
         return MessageViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.message_list_item,parent,false))
     }
 
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
-        holder.bind(list[position])
+        holder.bind(list[position],parentActivity)
     }
 
     override fun getItemCount(): Int {
@@ -27,10 +28,13 @@ class MessageListAdapter (var list: MutableList<ListMessageRepresentation>): Rec
 
 class MessageViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
 
-    fun bind(message:ListMessageRepresentation){
+    fun bind(message: ListMessageRepresentation, parentActivity: ChatActivityStarter){
         userName.text = message.userName
         messageText.text = message.message
         sendTime.text = message.formattedTime
+        userName.setOnClickListener(View.OnClickListener {
+            parentActivity.startChatActivity(message)
+        })
     }
 
 

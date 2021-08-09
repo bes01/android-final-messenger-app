@@ -11,8 +11,14 @@ import ge.bkapa.tkats.messengerapp.storage.model.Message
 import ge.bkapa.tkats.messengerapp.storage.model.User
 import ge.bkapa.tkats.messengerapp.storage.model.UserWithId
 import java.util.function.Consumer
+import kotlin.reflect.KFunction1
+import kotlin.reflect.KFunction2
 
-class Interactor() : AuthInteractor, MessageListInteractor, ProfileInteractor, SearchInteractor {
+class Interactor : AuthInteractor,
+                     MessageListInteractor,
+                     ProfileInteractor,
+                     SearchInteractor,
+                     ChatInteractor {
 
     private val database = Firebase.database
     private val storageReference = Firebase.storage.reference
@@ -22,6 +28,10 @@ class Interactor() : AuthInteractor, MessageListInteractor, ProfileInteractor, S
     override fun addUser(uid: String, username: String, whatIdo: String) {
         val usersRef = database.getReference("users")
         usersRef.child(uid).setValue(User(username, username, whatIdo))
+    }
+
+    override fun getUser(uid : String, function: (u: User) -> Unit) {
+        getFullUser(uid,function)
     }
 
     override fun getMessagesForUser(uid: String, function: (MutableList<Message>) -> Unit) {
@@ -110,6 +120,115 @@ class Interactor() : AuthInteractor, MessageListInteractor, ProfileInteractor, S
         }
     }
 
+    override fun getMessagesForBetweenUsers(
+        username1: String,
+        username2: String,
+        function: (MutableList<Message>) -> Unit
+    ) {
+        val result = mutableListOf<Message>()
+        username1.let {
+            database.getReference("messages").child(it).child(username2).get().addOnSuccessListener { res ->
+                    result.addAll(res.children.map { dataSnapshot ->
+                        val value = dataSnapshot.value as HashMap<*, *>
+                        Message(
+                            value["sender"] as String,
+                            value["message"] as String,
+                            value["sendTime"] as Long,
+                            username1,
+                            username2
+                        )
+                    });
+                function(result)
+            }
+        }
+    }
+
+    override fun setSenderImage(username: String, receiveResult: KFunction1<Any?, Unit>) {
+        val ref = storageReference.child("images/$username")
+        ref.getBytes(MAX_IMG_SIZE).addOnSuccessListener {
+            val bitmap = BitmapFactory.decodeByteArray(it, 0, it.size)
+            receiveResult(bitmap)
+        }.addOnFailureListener {
+            receiveResult(null)
+        }
+    }
+
+    override fun setSenderWhatIDo(username: String, kFunction1: KFunction1<String, Unit>) {
+        val ref = database.getReference("users")
+            ref.orderByChild("username").equalTo(username).get().addOnSuccessListener {
+                val value = (it.value as HashMap<*,*>).toList()[0].second as HashMap<*,*>
+                kFunction1(value["whatIdo"] as String)
+            }
+    }
+
+    override fun sendMessage(
+        text: String?,
+        activeUser: String,
+        chatUser: String,
+        kFunction0: KFunction2<String, String, Unit>
+    ) {
+        val dbReference = database.getReference("messages")
+
+        val activeUserRef = dbReference.child(activeUser).ref
+        val chatUserRef = dbReference.child(chatUser).ref
+
+        dbReference.child(activeUser).child(chatUser).get().addOnSuccessListener {
+            val children = mutableListOf<Message>()
+
+            if (it.value != null){
+                it.children.forEach(Consumer { item->
+                    val value = item.value as HashMap<*, *>
+                    children.add(Message(
+                        value["sender"] as String,
+                        value["message"] as String,
+                        value["sendTime"] as Long,
+                        activeUser,
+                        chatUser
+                    ))
+                })
+            }
+            children.add(Message(activeUser,text,System.currentTimeMillis(),activeUser,chatUser))
+            val data = HashMap<String,Message>()
+            var i :Int = 0
+            children.forEach(Consumer { message->
+                if (message!=null){
+                    data[i.toString()] = message
+                    i++
+                }
+            })
+            activeUserRef.child(chatUser).updateChildren(data as Map<String, Any>)
+            kFunction0(activeUser,chatUser)
+        }
+
+        dbReference.child(chatUser).child(activeUser).get().addOnSuccessListener {
+            val children = mutableListOf<Message>()
+
+            if (it.value != null){
+                it.children.forEach(Consumer { item->
+                    val value = item.value as HashMap<*, *>
+                    children.add(Message(
+                        value["sender"] as String,
+                        value["message"] as String,
+                        value["sendTime"] as Long,
+                        chatUser,
+                        activeUser
+                    ))
+                })
+            }
+            children.add(Message(activeUser,text,System.currentTimeMillis(),chatUser,activeUser))
+            val data = HashMap<String,Message>()
+            var i :Int = 0
+            children.forEach(Consumer { message->
+                if (message!=null){
+                    data[i.toString()] = message
+                    i++
+                }
+            })
+            chatUserRef.child(activeUser).updateChildren(data as Map<String, Any>)
+        }
+    }
+
+
     /*************************************************/
 
     /** private methods **/
@@ -124,7 +243,9 @@ class Interactor() : AuthInteractor, MessageListInteractor, ProfileInteractor, S
                         Message(
                             value["sender"] as String,
                             value["message"] as String,
-                            value["sendTime"] as Long
+                            value["sendTime"] as Long,
+                            user.username!!,
+                            t.key
                         )
                     });
                 })
@@ -170,5 +291,7 @@ class Interactor() : AuthInteractor, MessageListInteractor, ProfileInteractor, S
         const val USER_CHUNK_SIZE = 6
         const val MAX_IMG_SIZE: Long = 1024 * 1024 * 10
     }
+
+
 
 }

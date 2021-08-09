@@ -1,5 +1,6 @@
 package ge.bkapa.tkats.messengerapp.view
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -103,6 +104,20 @@ class SearchActivity : AppCompatActivity() {
     private fun findUserByNickname(searchWord: String) {
         toggleProgressBar()
         presenter.makeUserSearchRequest(searchWord)
+    }
+
+    fun startChatActivity(username: String?) {
+
+        presenter.getCurrentUser {
+            finish()
+            val intent = Intent(this, ChatActivity::class.java)
+            intent.putExtra(MessageListActivity.USERNAME1, it.username)
+            intent.putExtra(MessageListActivity.USERNAME2, username)
+
+            startActivity(intent)
+
+        }
+
     }
 
 }

@@ -11,8 +11,10 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ge.bkapa.tkats.messengerapp.R
 import ge.bkapa.tkats.messengerapp.adapter.MessagePageFragmentAdapter
+import ge.bkapa.tkats.messengerapp.storage.model.ListMessageRepresentation
+import ge.bkapa.tkats.messengerapp.view.fragment.MessageListFragment
 
-class MessageListActivity : AppCompatActivity(), FragmentedActivity {
+class MessageListActivity : AppCompatActivity(), FragmentedActivity, ChatActivityStarter {
 
     private lateinit var fragmentAdapter: MessagePageFragmentAdapter
 
@@ -58,6 +60,24 @@ class MessageListActivity : AppCompatActivity(), FragmentedActivity {
         }
     }
 
+    override fun startChatActivity(uid: ListMessageRepresentation){
+
+        (getFragment(0) as MessageListFragment).getActiveUser { (u ) ->
+            run {
+                val intent = Intent(this, ChatActivity::class.java)
+                intent.putExtra(USERNAME1, u)
+                intent.putExtra(USERNAME2, uid.userName)
+
+                startActivity(intent)
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (getFragment(0) as MessageListFragment).getData()
+    }
+
     //TODO: onResume  - check user sign in status
 
     override fun getFragment(index: Int): Fragment {
@@ -66,6 +86,8 @@ class MessageListActivity : AppCompatActivity(), FragmentedActivity {
 
     companion object {
         const val USER_ID = "USER_ID"
+        const val USERNAME1 = "USERNAME1"
+        const val USERNAME2 = "USERNAME2"
     }
 
 }

@@ -20,10 +20,7 @@ class SearchListAdapter(private val users: List<User>, private val activity: Sea
     }
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-        val item = users[position]
-        holder.userImage.setImageResource(R.drawable.avatar_image_placeholder)
-        holder.nickname.text = item.nickname
-        holder.whatIDo.text = item.whatIdo
+        holder.bind(users[position])
         if (position == users.size - 1) {
             activity.getNextUserChunk()
         }
@@ -35,16 +32,20 @@ class SearchListAdapter(private val users: List<User>, private val activity: Sea
     }
 
 
-    class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        init {
+        fun bind(item: User) {
+            userImage.setImageResource(R.drawable.avatar_image_placeholder)
+            nickname.text = item.nickname
+            whatIDo.text = item.whatIdo
             itemView.setOnClickListener {
-                // TODO: open Chat [tkats], activity-ც გაქვს
+                activity.startChatActivity(item.username)
             }
         }
 
         val userImage: ImageView = itemView.findViewById(R.id.search_item_img)
         val nickname: TextView = itemView.findViewById(R.id.nickname_text_view)
         val whatIDo: TextView = itemView.findViewById(R.id.what_i_do_text_view)
+
     }
 }

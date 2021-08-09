@@ -5,7 +5,6 @@ import android.util.Log
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import ge.bkapa.tkats.messengerapp.storage.AuthInteractor
 import ge.bkapa.tkats.messengerapp.storage.Interactor
@@ -77,6 +76,10 @@ class AuthorizationService(private val parentActivity: Activity) {
     private fun processPassword(password: String): String {
         Log.i("Password", password.hashCode().toString())
         return password.hashCode().toString()
+    }
+
+    fun getCurrentUser(function: (u: User) -> Unit) {
+        interactor.getUser(auth.currentUser!!.uid, function)
     }
 
 }

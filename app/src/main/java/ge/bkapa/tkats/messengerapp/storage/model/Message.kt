@@ -6,16 +6,29 @@ import ge.bkapa.tkats.messengerapp.util.MessengerExtensions
 @IgnoreExtraProperties
 
 data class Message(
-    var sender:String ? = null,
-    var message:String ? = null,
-    var sendTime:Long ? = null
-){
+    var sender: String? = null,
+    var message: String? = null,
+    var sendTime: Long? = null,
+    var participantOne: String,
+    var participantTwo: String?,
+
+    ){
 
     fun toListMessageRepresentation() :ListMessageRepresentation{
         return ListMessageRepresentation(
-            this.sender!!,
+            participantTwo!!,
             this.message!!,
             MessengerExtensions.toMessageListTime(this.sendTime!!)
+        )
+    }
+
+    fun toChatMessageRepresentation() : ChatMessageRepresentation{
+        return  ChatMessageRepresentation(
+            sender,
+            message,
+            MessengerExtensions.toMessageListTime(this.sendTime!!),
+            participantTwo!!,
+            this.message!!,
         )
     }
 

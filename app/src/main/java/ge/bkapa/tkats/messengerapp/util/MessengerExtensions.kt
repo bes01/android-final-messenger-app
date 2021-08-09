@@ -11,7 +11,7 @@ class MessengerExtensions {
         var format = SimpleDateFormat("dd/MM")
 
         fun toMessageListTime(milliseconds:Long):String{
-            var diff = (System.currentTimeMillis()/1000 - milliseconds)
+            var diff = (System.currentTimeMillis() - milliseconds)
 
             if (diff<60) return "$diff sec"
 
