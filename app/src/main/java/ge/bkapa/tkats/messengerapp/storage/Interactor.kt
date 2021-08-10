@@ -8,6 +8,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import ge.bkapa.tkats.messengerapp.storage.model.ListMessageRepresentation
 import ge.bkapa.tkats.messengerapp.storage.model.Message
 import ge.bkapa.tkats.messengerapp.storage.model.User
 import ge.bkapa.tkats.messengerapp.storage.model.UserWithId
@@ -38,6 +39,22 @@ class Interactor : AuthInteractor,
 
     override fun getMessagesForUser(uid: String, function: (MutableList<Message>) -> Unit) {
         getFullUser(uid) { user -> getUserMessages(user, function) }
+    }
+
+    override fun getImage(
+        userName: String,
+        kFunction1: (result: Bitmap?) -> Unit
+    ) {
+        var res : Bitmap ?= null
+        val ref = storageReference.child("images/$userName")
+        ref.getBytes(MAX_IMG_SIZE).addOnSuccessListener { curIt ->
+            val bitmap = BitmapFactory.decodeByteArray(curIt, 0, curIt.size)
+            res = bitmap
+            kFunction1(res)
+        }.addOnFailureListener {
+            res = null
+            kFunction1(res)
+        }
     }
 
     override fun getUserByIdRequest(
@@ -291,26 +308,13 @@ class Interactor : AuthInteractor,
                     }
 
                     var i = 0
-
                     result.map { item ->
                         getFullUserByUsername(item.participantTwo!!) { user ->
-
                             item.nickNameToRender = user.nickname
 
-                            val ref = storageReference.child("images/" + item.participantTwo)
-                            ref.getBytes(MAX_IMG_SIZE).addOnSuccessListener { curIt ->
-                                i++
-                                val bitmap = BitmapFactory.decodeByteArray(curIt, 0, curIt.size)
-                                item.imageData = bitmap
-                                if (i == result.size) {
-                                    function(result)
-                                }
-                            }.addOnFailureListener {
-                                i++
-                                item.imageData = null
-                                if (i == result.size) {
-                                    function(result)
-                                }
+                            i++
+                            if (i == result.size) {
+                                function(result)
                             }
                         }
                     }

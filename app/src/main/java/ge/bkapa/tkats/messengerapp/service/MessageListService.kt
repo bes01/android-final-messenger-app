@@ -1,5 +1,6 @@
 package ge.bkapa.tkats.messengerapp.service
 
+import android.graphics.Bitmap
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -18,6 +19,10 @@ class MessageListService (val parentActivity:MessageListActivity){
         interactor.getMessagesForUser(auth.currentUser!!.uid) { list: MutableList<Message> ->
             function(list.map { message -> message.toListMessageRepresentation() } as MutableList<ListMessageRepresentation>)
         }
+    }
+
+    fun getImage(userName: String, kFunction1: (result: Bitmap?) -> Unit) {
+        interactor.getImage(userName,kFunction1)
     }
 
 }

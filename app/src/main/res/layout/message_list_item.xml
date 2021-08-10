@@ -9,8 +9,17 @@
     <ImageView
         android:id="@+id/user_image_view"
         android:layout_width="60dp"
+        android:visibility="gone"
         android:layout_height="60dp"
         android:src="@drawable/avatar_image_placeholder"/>
+
+    <ProgressBar
+        android:id="@+id/message_list_image_loading"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/primary_button_color"
+        android:visibility="visible" />
 
     <LinearLayout
         android:layout_width="match_parent"

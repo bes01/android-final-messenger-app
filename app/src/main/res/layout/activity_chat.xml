@@ -50,6 +50,7 @@
                     >
 
                     <LinearLayout
+                        android:id="@+id/linearLayout2"
                         android:layout_width="wrap_content"
                         android:layout_height="70dp"
                         android:fitsSystemWindows="true"
@@ -68,17 +69,29 @@
                             android:textSize="30sp" />
 
                         <TextView
+                            android:id="@+id/sender_what_i_do"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/sender_what_i_do"
                             android:textColor="@color/white"
                             android:textSize="15sp" />
 
                     </LinearLayout>
+                    <ProgressBar
+                        android:layout_marginTop="5dp"
+                        android:id="@+id/chat_sender_loader"
+                        style="?android:attr/progressBarStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:indeterminateTint="@color/primary_button_color"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
+                        android:layout_marginTop="5dp"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
+                        android:visibility="visible"
                         app:layout_constraintCircleRadius="20dp"
                         android:id="@+id/sender_image"
                         android:src="@drawable/avatar_image_placeholder"

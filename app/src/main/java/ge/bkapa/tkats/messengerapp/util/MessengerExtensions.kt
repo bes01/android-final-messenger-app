@@ -19,7 +19,7 @@ class MessengerExtensions {
             if(diff<60) return "$diff min"
 
             diff /= 60
-            if(diff<60) return "$diff hours"
+            if(diff<25) return "$diff hours"
 
             return format.format(Date(milliseconds))
         }

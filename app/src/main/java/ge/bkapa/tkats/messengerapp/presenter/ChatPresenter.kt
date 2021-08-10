@@ -1,7 +1,9 @@
 package ge.bkapa.tkats.messengerapp.presenter
 
 import android.graphics.Bitmap
+import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import ge.bkapa.tkats.messengerapp.R
 import ge.bkapa.tkats.messengerapp.service.ChatService
@@ -19,6 +21,8 @@ class ChatPresenter(var chatActivity:ChatActivity){
     }
 
     fun setSenderImage(username: String) {
+        chatActivity.findViewById<ProgressBar>(R.id.chat_sender_loader).visibility = View.VISIBLE
+        chatActivity.findViewById<ImageView>(R.id.sender_image).visibility = View.GONE
         chatService.setSenderImage(username,this::receiveResult)
     }
 
@@ -36,6 +40,9 @@ class ChatPresenter(var chatActivity:ChatActivity){
 
     /** private functions **/
     private fun receiveResult( result: Any?) {
+        chatActivity.findViewById<ProgressBar>(R.id.chat_sender_loader).visibility = View.GONE
+        chatActivity.findViewById<ImageView>(R.id.sender_image).visibility = View.VISIBLE
+
         if (result != null) {
             chatActivity.findViewById<ImageView>(R.id.sender_image).setImageBitmap((result as Bitmap))
         } else {

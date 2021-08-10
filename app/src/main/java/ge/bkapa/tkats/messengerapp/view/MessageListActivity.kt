@@ -23,7 +23,7 @@ class MessageListActivity : AppCompatActivity(),
 
     private lateinit var fragmentAdapter: MessagePageFragmentAdapter
 
-    private lateinit var viewpager: ViewPager2
+    private var viewpager: ViewPager2 ? = null
 
     private lateinit var userId: String
 
@@ -38,9 +38,9 @@ class MessageListActivity : AppCompatActivity(),
         userId = intent.getStringExtra(AuthorizationActivity.USER_ID) as String
         fragmentAdapter = MessagePageFragmentAdapter(this, userId)
         viewpager = findViewById(R.id.messenger_main_fragment_container)
-        viewpager.adapter = fragmentAdapter
+        viewpager?.adapter = fragmentAdapter
 
-        viewpager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        viewpager?.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 if (position == 1) {
@@ -53,10 +53,10 @@ class MessageListActivity : AppCompatActivity(),
         })
 
         findViewById<AppCompatImageView>(R.id.settings).setOnClickListener {
-            viewpager.currentItem = 1
+            viewpager?.currentItem = 1
         }
         findViewById<AppCompatImageView>(R.id.home).setOnClickListener {
-            viewpager.currentItem = 0
+            viewpager?.currentItem = 0
         }
         findViewById<FloatingActionButton>(R.id.open_search_button).setOnClickListener {
             val intent = Intent(this, SearchActivity::class.java)
@@ -77,9 +77,15 @@ class MessageListActivity : AppCompatActivity(),
         }
     }
 
+    override fun getMessageListFragment() : MessageListFragment {
+        return getFragment(0) as MessageListFragment
+    }
+
     override fun onResume() {
         super.onResume()
-        fetchMessageList()
+        if (viewpager!=null){
+            fetchMessageList()
+        }
     }
 
 
