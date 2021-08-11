@@ -120,7 +120,7 @@
         </com.google.android.material.appbar.AppBarLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="top"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:orientation="vertical">
@@ -129,11 +129,21 @@
                 android:id="@+id/chat_list"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:visibility="gone"
                 android:layout_weight="1"
                 android:paddingLeft="@dimen/medium_padding"
                 android:paddingRight="@dimen/medium_padding"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
             </androidx.recyclerview.widget.RecyclerView>
+            <ProgressBar
+                android:id="@+id/chat_loading"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/collapsed_height"
+                android:indeterminateTint="@color/primary_button_color"
+                android:visibility="visible"/>
         </LinearLayout>
 
 
@@ -157,11 +167,14 @@
             <EditText
                 android:layout_width="0dp"
                 android:layout_weight="1"
+                android:imeOptions="actionDone"
                 android:layout_height="@dimen/tool_image"
                 android:layout_gravity="center_vertical"
                 android:id="@+id/message_text"
                 android:hint="@string/message_hint"
                 android:inputType="text"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:background="@android:color/transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

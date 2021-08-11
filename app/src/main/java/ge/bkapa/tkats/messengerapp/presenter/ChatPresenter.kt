@@ -1,10 +1,12 @@
 package ge.bkapa.tkats.messengerapp.presenter
 
 import android.graphics.Bitmap
+import android.opengl.Visibility
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import ge.bkapa.tkats.messengerapp.R
 import ge.bkapa.tkats.messengerapp.service.ChatService
 import ge.bkapa.tkats.messengerapp.storage.model.ChatMessageRepresentation
@@ -15,8 +17,14 @@ class ChatPresenter(var chatActivity:ChatActivity){
     private var chatService = ChatService()
 
     fun getAllChatForUser(username1: String,username2: String){
+        chatActivity.findViewById<RecyclerView>(R.id.chat_list).visibility = View.GONE
+        chatActivity.findViewById<ProgressBar>(R.id.chat_loading).visibility = View.VISIBLE
+
         chatService.getChatForUser(username1, username2) { list: MutableList<ChatMessageRepresentation> ->
             chatActivity.onChatFetched(list)
+
+            chatActivity.findViewById<RecyclerView>(R.id.chat_list).visibility = View.VISIBLE
+            chatActivity.findViewById<ProgressBar>(R.id.chat_loading).visibility = View.GONE
         }
     }
 

@@ -1,8 +1,8 @@
 package ge.bkapa.tkats.messengerapp.view
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -13,6 +13,7 @@ import ge.bkapa.tkats.messengerapp.R
 import ge.bkapa.tkats.messengerapp.adapter.ChatListAdapter
 import ge.bkapa.tkats.messengerapp.presenter.ChatPresenter
 import ge.bkapa.tkats.messengerapp.storage.model.ChatMessageRepresentation
+
 
 class ChatActivity : AppCompatActivity() {
 
@@ -39,7 +40,9 @@ class ChatActivity : AppCompatActivity() {
         chatListAdapter = ChatListAdapter(chatMessages,this)
 
         chatList = findViewById(R.id.chat_list)
-        chatList.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        val linearLayoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+
+        chatList.layoutManager = linearLayoutManager
         chatList.adapter = chatListAdapter
 
         intent.getStringExtra(MessageListActivity.USERNAME1).let {
@@ -65,8 +68,20 @@ class ChatActivity : AppCompatActivity() {
         })
 
         findViewById<ImageView>(R.id.send_message).setOnClickListener(View.OnClickListener {
+            val editText = findViewById<EditText>(R.id.message_text)
+            val text : String = editText.text.toString()
+            editText.text.clear()
+
+        // close edittext not necessary
+//            val imm: InputMethodManager = this.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+//            var view : View? = this.currentFocus
+//            if (view == null) {
+//                view = View(this)
+//            }
+//            imm.hideSoftInputFromWindow(view.windowToken, 0)
+
             chatPresenter.sendMessage(
-                findViewById<EditText>(R.id.message_text).text.toString(),
+                text,
                 intent.getStringExtra(MessageListActivity.USERNAME1)!!,
                 intent.getStringExtra(MessageListActivity.USERNAME2)!!
             )
