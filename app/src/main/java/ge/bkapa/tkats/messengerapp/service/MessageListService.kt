@@ -25,4 +25,10 @@ class MessageListService (val parentActivity:MessageListActivity){
         interactor.getImage(userName,kFunction1)
     }
 
+    fun searchMessage(text: String, function: (MutableList<ListMessageRepresentation>) -> Unit) {
+        interactor.searchMessagesForUser(auth.currentUser!!.uid,text){ list :MutableList<Message>->
+            function(list.map { message -> message.toListMessageRepresentation() } as MutableList<ListMessageRepresentation>)
+        }
+    }
+
 }

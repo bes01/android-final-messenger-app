@@ -8,7 +8,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import ge.bkapa.tkats.messengerapp.storage.model.ListMessageRepresentation
 import ge.bkapa.tkats.messengerapp.storage.model.Message
 import ge.bkapa.tkats.messengerapp.storage.model.User
 import ge.bkapa.tkats.messengerapp.storage.model.UserWithId
@@ -56,6 +55,22 @@ class Interactor : AuthInteractor,
             kFunction1(res)
         }
     }
+
+    //sauketeso gza araa mara davigale ukve dzaan, cxela ....
+    override fun searchMessagesForUser(
+        uid: String,
+        text: String,
+        function: (MutableList<Message>) -> Unit
+    ) {
+        getFullUser(uid) { user ->
+            getUserMessages(user){
+                var res :MutableList<Message> = mutableListOf()
+                res = it.filter { message -> message.nickNameToRender?.startsWith(text)!! } as MutableList<Message>
+                function(res)
+            }
+        }
+    }
+
 
     override fun getUserByIdRequest(
         id: String,

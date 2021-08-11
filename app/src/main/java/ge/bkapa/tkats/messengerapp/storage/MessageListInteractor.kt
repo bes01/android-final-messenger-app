@@ -9,4 +9,10 @@ interface MessageListInteractor {
 
     fun getImage(userName: String, kFunction1: (result: Bitmap?) -> Unit)
 
+    fun searchMessagesForUser(
+        uid: String,
+        text: String,
+        function: (MutableList<Message>) -> Unit
+    )
+
 }

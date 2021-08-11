@@ -68,7 +68,7 @@
                             android:contentDescription="@string/search_hint" />
 
                         <EditText
-                            android:id="@+id/editText"
+                            android:id="@+id/message_list_search"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"

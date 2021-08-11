@@ -3,8 +3,10 @@ package ge.bkapa.tkats.messengerapp.view
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.appbar.AppBarLayout
@@ -63,6 +65,10 @@ class MessageListActivity : AppCompatActivity(),
             intent.putExtra(USER_ID, userId)
             startActivity(intent)
         }
+        findViewById<EditText>(R.id.message_list_search).addTextChangedListener { text ->
+            (getFragment(0) as MessageListFragment).searchMessage(text.toString())
+        }
+
     }
 
     override fun startChatActivity(uid: ListMessageRepresentation){

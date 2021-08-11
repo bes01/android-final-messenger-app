@@ -30,4 +30,12 @@ class MessageListPresenter(var fragment: MessageListFragment,activity: MessageLi
         messageService.getImage(userName,kFunction1)
     }
 
+    fun searchMessages(text: String) {
+        fragment.initLoader()
+        messageService.searchMessage(text){ list: MutableList<ListMessageRepresentation> ->
+            fragment.onMessageListFetched(list)
+            fragment.closeLoader()
+        }
+    }
+
 }

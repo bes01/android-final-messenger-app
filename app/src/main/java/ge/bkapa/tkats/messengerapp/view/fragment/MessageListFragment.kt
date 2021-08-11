@@ -99,5 +99,11 @@ class MessageListFragment(var activity: MessageListActivity) : Fragment() {
         messageListPresenter?.getImage(userName,kFunction1)
     }
 
+    fun searchMessage(text: String) {
+        if (messageListPresenter!=null) {
+            messageListPresenter?.searchMessages(text)
+        }
+    }
+
 
 }
