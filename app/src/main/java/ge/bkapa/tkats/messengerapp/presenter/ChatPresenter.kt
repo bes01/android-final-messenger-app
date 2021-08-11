@@ -63,4 +63,8 @@ class ChatPresenter(var chatActivity:ChatActivity){
 
     }
 
+    fun setEventListener(username1: String, username2: String) {
+        chatService.setEventListener(username1,username2,this::getAllChatForUser)
+    }
+
 }

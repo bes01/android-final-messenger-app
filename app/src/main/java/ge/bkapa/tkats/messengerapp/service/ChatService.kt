@@ -39,4 +39,12 @@ class ChatService {
         interactor.sendMessage(text,activeUser,chatUser,kFunction0)
     }
 
+    fun setEventListener(
+        username1: String,
+        username2: String,
+        kFunction2: KFunction2<String, String, Unit>
+    ) {
+        interactor.setChatEventListener(username1,username2,kFunction2)
+    }
+
 }

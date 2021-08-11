@@ -57,6 +57,10 @@ class ChatActivity : AppCompatActivity() {
         chatPresenter.setSenderImage(intent.getStringExtra(MessageListActivity.USERNAME2)!!)
         chatPresenter.setSenderWhatIDo(intent.getStringExtra(MessageListActivity.USERNAME2)!!)
 
+        chatPresenter.setEventListener(
+            intent.getStringExtra(MessageListActivity.USERNAME1)!!,
+            intent.getStringExtra(MessageListActivity.USERNAME2)!!
+        )
 
         chatPresenter.getAllChatForUser(
             intent.getStringExtra(MessageListActivity.USERNAME1)!!,

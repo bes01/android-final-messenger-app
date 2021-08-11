@@ -23,4 +23,10 @@ interface ChatInteractor {
         kFunction0: KFunction2<String, String, Unit>
     )
 
+    fun setChatEventListener(
+        username1: String,
+        username2: String,
+        kFunction2: KFunction2<String, String, Unit>
+    )
+
 }

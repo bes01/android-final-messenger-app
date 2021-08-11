@@ -5,6 +5,8 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
 import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -293,6 +295,25 @@ class Interactor : AuthInteractor,
         }
     }
 
+    override fun setChatEventListener(
+        username1: String,
+        username2: String,
+        kFunction2: KFunction2<String, String, Unit>
+    ) {
+        database.getReference("messages").child(username1).child(username2).addValueEventListener(
+            object: ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    kFunction2(username1,username2)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // do nothing
+                }
+
+            }
+        )
+    }
+
 
     /*************************************************/
 
@@ -334,6 +355,11 @@ class Interactor : AuthInteractor,
                         }
                     }
                 })
+                if (res.children.toList().isEmpty()){
+                    function(mutableListOf())
+                }
+            }.addOnFailureListener {
+                function(mutableListOf())
             }
         }
     }
