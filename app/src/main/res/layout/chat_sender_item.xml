@@ -1,23 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_width="350dp"
-    android:layout_height="80dp"
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/message_bar_length"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/small_padding"
+    android:paddingTop="@dimen/small_padding"
     android:layout_gravity="right"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal">
-
+    android:orientation="horizontal"
+    tools:ignore="RtlHardcoded">
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
     <TextView
         android:id="@+id/sender_time"
-        android:layout_width="50dp"
-        android:layout_height="30dp"
-        android:text="sahdbjashsha"
-        android:textAlignment="center"
-        android:layout_gravity="center"
-        />
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/chat_low_text"
+        android:layout_marginRight="@dimen/small_padding"
+        android:gravity="center"
+        android:layout_gravity="center_vertical"/>
     <TextView
         android:id="@+id/sender_text"
-        android:layout_width="280dp"
-        android:layout_height="60dp"
-        android:layout_gravity="center"
+        android:layout_width="@dimen/text_container_width"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="@dimen/medium_padding"
+        android:paddingBottom="@dimen/medium_padding"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="@dimen/right_chat_margin"
+        android:textAlignment="viewStart"
         android:background="@drawable/sender_message"
-        />
+        tools:ignore="RtlCompat" />
+
 </LinearLayout>

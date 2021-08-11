@@ -13,18 +13,18 @@
         android:layout_height="wrap_content"
         android:background="@color/primary_button_color"
         android:orientation="horizontal"
-        android:paddingTop="30dp"
-        android:paddingBottom="10dp"
+        android:paddingTop="@dimen/small_padding"
+        android:paddingBottom="@dimen/small_padding"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="@dimen/input_height"
             android:layout_gravity="bottom"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginTop="@dimen/small_padding"
+            android:layout_marginBottom="@dimen/small_padding"
             android:fitsSystemWindows="true"
             app:expanded="true"
             app:layout_collapseMode="pin"
@@ -33,17 +33,18 @@
 
             <ImageView
                 android:id="@+id/back_button"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="@dimen/tool_image"
+                android:layout_height="@dimen/tool_image"
                 android:layout_gravity="bottom"
-                android:layout_marginBottom="10dp"
-                android:src="@drawable/ic_baseline_arrow_back_ios_24" />
+                android:layout_marginBottom="@dimen/tool_image"
+                android:src="@drawable/ic_baseline_arrow_back_ios_24"
+                android:contentDescription="@string/back_icon_chat" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
+                android:layout_height="@dimen/big_image"
+                android:layout_marginStart="@dimen/small_padding"
+                android:layout_marginEnd="@dimen/small_padding"
                 android:background="@drawable/search_background"
                 android:fitsSystemWindows="true"
                 android:gravity="center_vertical"
@@ -54,12 +55,13 @@
                     android:id="@+id/zoom_tool_img"
                     android:layout_width="@dimen/tool_image"
                     android:layout_height="@dimen/tool_image"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="@dimen/medium_padding"
                     android:src="@mipmap/search_image_foreground"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/browser_actions_title_color" />
+                    app:tint="@color/browser_actions_title_color"
+                    android:contentDescription="@string/search_icon" />
 
                 <EditText
                     android:id="@+id/user_search_edit_text"
@@ -68,8 +70,9 @@
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
                     android:gravity="center_vertical"
-                    android:hint="Search"
-                    android:padding="8dp"
+                    android:inputType="text"
+                    android:hint="@string/search"
+                    android:padding="@dimen/small_padding"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/imageView2"
@@ -83,11 +86,11 @@
         android:id="@+id/error_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="No match found"
+        android:layout_marginTop="@dimen/medium_padding"
+        android:text="@string/no_match_found"
         android:textStyle="bold"
         android:textColor="@color/black"
-        android:textSize="16dp"
+        android:textSize="@dimen/small_text"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -97,8 +100,7 @@
         android:id="@+id/search_recycle_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:paddingBottom="120dp"
+        android:paddingBottom="@dimen/user_list_height"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_container" />

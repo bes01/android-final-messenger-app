@@ -1,4 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="tool_image">30dp</dimen>
+    <dimen name="bottom_toolbar_icons">20dp</dimen>
+    <dimen name="chat_app_bar_height">150dp</dimen>
+    <dimen name="medium_padding">20dp</dimen>
+    <dimen name="collapsed_height">100dp</dimen>
+    <dimen name="toolbar_content_height">70dp</dimen>
+    <dimen name="big_text">30sp</dimen>
+    <dimen name="small_text">15sp</dimen>
+    <dimen name="small_padding">10dp</dimen>
+    <dimen name="big_image">50dp</dimen>
+    <dimen name="input_height">60dp</dimen>
+    <dimen name="message_list_toolbar">120dp</dimen>
+    <dimen name="user_list_height">120dp</dimen>
+    <dimen name="message_bar_length">350dp</dimen>
+    <dimen name="text_container_width">220dp</dimen>
+    <dimen name="chat_low_text">30dp</dimen>
+    <dimen name="right_chat_margin">30dp</dimen>
+    <dimen name="message_list_item_width">90dp</dimen>
+    <dimen name="message_list_item_marg">15dp</dimen>
+    <dimen name="authorization_photo">200dp</dimen>
+    <dimen name="authorization_textfield">250dp</dimen>
+    <dimen name="textfield_margin">40dp</dimen>
+    <dimen name="button_width">100dp</dimen>
+    <dimen name="button_height">45dp</dimen>
+    <dimen name="button_margin">30dp</dimen>
+    <dimen name="small_button_height">35dp</dimen>
 </resources>

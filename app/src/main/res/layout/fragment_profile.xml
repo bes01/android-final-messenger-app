@@ -23,22 +23,23 @@
 
         <ImageView
             android:id="@+id/change_photo"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="@dimen/authorization_photo"
+            android:layout_height="@dimen/authorization_photo"
             android:foreground="@drawable/rounded_fg"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/profile_photo" />
 
         <EditText
             android:id="@+id/change_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:width="250dp"
+            android:layout_marginTop="@dimen/textfield_margin"
+            android:width="@dimen/authorization_textfield"
             android:background="@drawable/edit_text_style"
-            android:hint="Enter your nickname"
+            android:hint="@string/enter_your_nickname"
             android:maxLines="1"
             android:scrollHorizontally="true"
             android:singleLine="true"
@@ -52,10 +53,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
-            android:width="250dp"
+            android:layout_marginTop="@dimen/small_padding"
+            android:width="@dimen/authorization_textfield"
             android:background="@drawable/edit_text_style"
-            android:hint="What I do"
+            android:hint="@string/what_i_do"
             android:maxLines="1"
             android:scrollHorizontally="true"
             android:singleLine="true"
@@ -66,22 +67,22 @@
 
         <Button
             android:id="@+id/update_button"
-            android:layout_width="100dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="30dp"
+            android:layout_width="@dimen/button_width"
+            android:layout_height="@dimen/button_height"
+            android:layout_marginTop="@dimen/button_margin"
             android:backgroundTint="@color/primary_button_color"
-            android:text="Update"
+            android:text="@string/update"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/change_what_u_do" />
 
         <android.widget.Button
             android:id="@+id/sign_out_button"
-            android:layout_width="100dp"
-            android:layout_height="35dp"
-            android:layout_marginTop="10dp"
+            android:layout_width="@dimen/button_width"
+            android:layout_height="@dimen/small_button_height"
+            android:layout_marginTop="@dimen/small_padding"
             android:background="@drawable/secondary_button_background"
-            android:text="SIGN OUT"
+            android:text="@string/sign_out"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/update_button" />

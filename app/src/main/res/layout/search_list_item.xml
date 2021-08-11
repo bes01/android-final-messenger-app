@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/small_padding"
+    android:layout_marginBottom="@dimen/small_padding"
     android:orientation="horizontal">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,14 +14,15 @@
 
         <ImageView
             android:id="@+id/search_item_img"
-            android:layout_marginLeft="20dp"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_marginStart="@dimen/medium_padding"
+            android:layout_width="@dimen/big_image"
+            android:layout_height="@dimen/big_image"
             android:foreground="@drawable/rounded_fg"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/user_list_image" />
 
         <ProgressBar
             android:id="@+id/item_image_loading"
@@ -34,9 +36,9 @@
             app:layout_constraintTop_toTopOf="@+id/search_item_img" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_marginLeft="30dp"
+            android:layout_marginStart="@dimen/medium_padding"
             android:layout_width="wrap_content"
-            android:layout_height="70dp"
+            android:layout_height="@dimen/big_image"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/search_item_img"
@@ -46,13 +48,18 @@
                 android:id="@+id/nickname_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:textSize="@dimen/small_text"
+                android:gravity="center"
+                android:layout_gravity="center_vertical"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/what_i_do_text_view"
                 android:layout_width="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
                 android:layout_height="wrap_content" />
+
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

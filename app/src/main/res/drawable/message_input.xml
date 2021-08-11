@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#E3E1E1" />
+    <solid android:color="@color/message_app_grey" />
     <padding
         android:bottom="10dp"
         android:left="40dp"

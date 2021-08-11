@@ -8,4 +8,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="primary_button_color">#2368e8</color>
+    <color name="blue_backgrounds">#5479f1</color>
+
+    <color name="purple_backgrounds">#5579f1</color>
+    <color name="message_app_grey">#f4f4f4</color>
+    <color name="message_app_bluish_grey">#f4f6fe</color>
 </resources>
