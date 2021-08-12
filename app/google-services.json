@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "510601921732",
-    "firebase_url": "https://messenger-app-8f62d-default-rtdb.firebaseio.com",
-    "project_id": "messenger-app-8f62d",
-    "storage_bucket": "messenger-app-8f62d.appspot.com"
+    "project_number": "1059932102336",
+    "firebase_url": "https://messenger-app-5ff9c-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "messenger-app-5ff9c",
+    "storage_bucket": "messenger-app-5ff9c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:510601921732:android:9a042dce0dca3d72d4b591",
+        "mobilesdk_app_id": "1:1059932102336:android:276776bfdc22c1c19c9725",
         "android_client_info": {
           "package_name": "ge.bkapa.tkats.messengerapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "510601921732-bgmjaakp2fobfm2ttlimc5ahbr0j08u7.apps.googleusercontent.com",
+          "client_id": "1059932102336-q3dbam8ven3eva3t2l7vf9v8j0utr4of.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCUSNa_xJDDLsrc6bkb-zLjTPxwiGO3R5c"
+          "current_key": "AIzaSyB-kNLTnooNV07o_ZEaSqunzOhlRZ_gEH8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "510601921732-bgmjaakp2fobfm2ttlimc5ahbr0j08u7.apps.googleusercontent.com",
+              "client_id": "1059932102336-q3dbam8ven3eva3t2l7vf9v8j0utr4of.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
