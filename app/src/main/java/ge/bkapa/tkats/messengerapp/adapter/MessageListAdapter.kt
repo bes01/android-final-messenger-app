@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.Nullable
@@ -36,7 +37,7 @@ class MessageListAdapter (var list: MutableList<ListMessageRepresentation>, var 
             messageText.text = message.message
             sendTime.text = message.formattedTime
 
-            userName.setOnClickListener(View.OnClickListener {
+            container.setOnClickListener(View.OnClickListener {
                 parentActivity.startChatActivity(message)
             })
             userImageProgress.visibility = View.VISIBLE
@@ -62,6 +63,6 @@ class MessageListAdapter (var list: MutableList<ListMessageRepresentation>, var 
         private var sendTime: TextView = itemView.findViewById(R.id.sendTime)
         private var userImage:ImageView = itemView.findViewById(R.id.user_image_view)
         private var userImageProgress:ProgressBar = itemView.findViewById(R.id.message_list_image_loading)
-
+        private var container :LinearLayout = itemView.findViewById(R.id.message_list_item_container)
     }
 }

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_marginTop="@dimen/small_padding"
+    android:id="@+id/message_list_item_container"
     android:layout_height="@dimen/message_list_item_width"
     android:paddingLeft="@dimen/medium_padding"
     android:paddingRight="@dimen/medium_padding">
