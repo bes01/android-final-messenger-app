@@ -18,7 +18,7 @@ class MessageListPresenter(var fragment: MessageListFragment,activity: MessageLi
         fragment.initLoader()
         messageService.getMessagesForUser { list: MutableList<ListMessageRepresentation> ->
             fragment.onMessageListFetched(list)
-            fragment.closeLoader()
+            fragment.closeLoader(list.size)
         }
     }
 
@@ -34,7 +34,7 @@ class MessageListPresenter(var fragment: MessageListFragment,activity: MessageLi
         fragment.initLoader()
         messageService.searchMessage(text){ list: MutableList<ListMessageRepresentation> ->
             fragment.onMessageListFetched(list)
-            fragment.closeLoader()
+            fragment.closeLoader(list.size)
         }
     }
 

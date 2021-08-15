@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -62,7 +64,7 @@ class MessageListFragment(var activity: MessageListActivity) : Fragment() {
         messageList.clear()
         messageList.addAll(list)
         listAdapter.notifyDataSetChanged()
-        closeLoader()
+        closeLoader(list.size)
     }
 
     fun getActiveUser(function: (u: User) -> Unit) {
@@ -70,7 +72,7 @@ class MessageListFragment(var activity: MessageListActivity) : Fragment() {
     }
 
     fun initLoader() {
-        val loader = activity.findViewById<ConstraintLayout>(R.id.message_list_loader_container)
+        val loader = activity.findViewById<ProgressBar>(R.id.message_list_user_loading)
         if (loader!=null){
             loader.visibility = View.VISIBLE
         }
@@ -80,18 +82,32 @@ class MessageListFragment(var activity: MessageListActivity) : Fragment() {
         if (list!=null) {
             list.visibility = View.GONE
         }
+
+        val noMessage = activity.findViewById<TextView>(R.id.no_list_messages)
+
+        if (noMessage!=null){
+            noMessage.visibility = View.GONE
+        }
+
     }
 
-    fun closeLoader(){
-        val loader = activity.findViewById<ConstraintLayout>(R.id.message_list_loader_container)
+    fun closeLoader(size: Int) {
+        val loader = activity.findViewById<ProgressBar>(R.id.message_list_user_loading)
         if (loader!=null){
             loader.visibility = View.GONE
         }
 
         val list = activity.findViewById<RecyclerView>(R.id.message_list)
+        val noMessage = activity.findViewById<TextView>(R.id.no_list_messages)
 
-        if (list!=null) {
-            list.visibility = View.VISIBLE
+        if (list!=null && noMessage!=null) {
+            if (size==0){
+                noMessage.visibility = View.VISIBLE
+                list.visibility = View.GONE
+            }else{
+                noMessage.visibility = View.GONE
+                list.visibility = View.VISIBLE
+            }
         }
     }
 

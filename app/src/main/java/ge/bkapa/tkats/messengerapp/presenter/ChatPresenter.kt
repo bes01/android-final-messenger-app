@@ -5,6 +5,7 @@ import android.opengl.Visibility
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ge.bkapa.tkats.messengerapp.R
@@ -18,12 +19,18 @@ class ChatPresenter(var chatActivity:ChatActivity){
 
     fun getAllChatForUser(username1: String,username2: String){
         chatActivity.findViewById<RecyclerView>(R.id.chat_list).visibility = View.GONE
+        chatActivity.findViewById<ScrollView>(R.id.no_chat_result).visibility = View.GONE
         chatActivity.findViewById<ProgressBar>(R.id.chat_loading).visibility = View.VISIBLE
 
         chatService.getChatForUser(username1, username2) { list: MutableList<ChatMessageRepresentation> ->
             chatActivity.onChatFetched(list)
-
-            chatActivity.findViewById<RecyclerView>(R.id.chat_list).visibility = View.VISIBLE
+            if (list.size==0){
+                chatActivity.findViewById<ScrollView>(R.id.no_chat_result).visibility = View.VISIBLE
+                chatActivity.findViewById<RecyclerView>(R.id.chat_list).visibility = View.GONE
+            }else{
+                chatActivity.findViewById<ScrollView>(R.id.no_chat_result).visibility = View.GONE
+                chatActivity.findViewById<RecyclerView>(R.id.chat_list).visibility = View.VISIBLE
+            }
             chatActivity.findViewById<ProgressBar>(R.id.chat_loading).visibility = View.GONE
         }
     }

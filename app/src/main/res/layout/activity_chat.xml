@@ -143,7 +143,23 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/collapsed_height"
                 android:indeterminateTint="@color/primary_button_color"
+                android:visibility="gone"/>
+            <ScrollView
+                android:id="@+id/no_chat_result"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|center"
+                android:layout_marginTop="@dimen/medium_padding"
+                android:text="@string/no_messages"
+                android:textSize="@dimen/big_text"
                 android:visibility="visible"/>
+            </ScrollView>
+
         </LinearLayout>
 
 
